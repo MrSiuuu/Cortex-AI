@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* —— Mode sombre (défaut) —— */
+:root {
+  --bg: #0d0d12;
+  --bg-card: #16161d;
+  --bg-card-hover: #1c1c26;
+  --text: #e8e8ed;
+  --text-muted: #8b8b9a;
+  --accent-violet: #8b5cf6;
+  --accent-blue: #3b82f6;
+  --accent-green: #22c55e;
+  --accent-violet-subtle: rgba(139, 92, 246, 0.15);
+  --accent-blue-subtle: rgba(59, 130, 246, 0.2);
+  --accent-green-subtle: rgba(34, 197, 94, 0.15);
+  --border-accent: rgba(139, 92, 246, 0.25);
+  --gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #22c55e 100%);
+  --glow-violet: 0 0 30px rgba(139, 92, 246, 0.35);
+  --glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+  --hero-glow: rgba(139, 92, 246, 0.12);
+  --radius: 12px;
+  --radius-lg: 20px;
+  --nav-bg: rgba(13, 13, 18, 0.85);
+  --nav-border: rgba(139, 92, 246, 0.15);
+  --section-bg: rgba(0, 0, 0, 0.15);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--text);
+  background-color: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* —— Mode clair (préférence système) —— */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --accent-violet: #7c3aed;
+    --accent-blue: #2563eb;
+    --accent-green: #16a34a;
+    --accent-violet-subtle: rgba(124, 58, 237, 0.1);
+    --accent-blue-subtle: rgba(37, 99, 235, 0.1);
+    --accent-green-subtle: rgba(22, 163, 74, 0.12);
+    --border-accent: rgba(124, 58, 237, 0.25);
+    --glow-violet: 0 0 24px rgba(124, 58, 237, 0.2);
+    --glow-blue: 0 0 16px rgba(37, 99, 235, 0.15);
+    --hero-glow: rgba(124, 58, 237, 0.08);
+    --nav-bg: rgba(248, 250, 252, 0.9);
+    --nav-border: rgba(124, 58, 237, 0.12);
+    --section-bg: rgba(124, 58, 237, 0.04);
+    --border-subtle: rgba(0, 0, 0, 0.08);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: var(--accent-violet);
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+button:focus-visible {
+  outline: 2px solid var(--accent-violet);
+  outline-offset: 2px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0 0 0.5rem;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+/* Bouton secondaire (ex. "Voir les tarifs" sous les offres) */
+.btn-secondary {
+  background: transparent;
+  color: var(--accent-violet);
+  border: 2px solid var(--accent-violet);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+}
+.btn-secondary:hover {
+  background: var(--accent-violet-subtle);
+  box-shadow: var(--glow-violet);
+}
