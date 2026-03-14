@@ -15,8 +15,9 @@ dist-ssr
 .env.local
 .env.*.local
 
-# Fichiers sensibles
+# Fichiers sensibles (md ignorés sauf README)
 *.md
+!README.md
 
 # Editor directories and files
 .vscode/*

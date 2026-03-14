@@ -34,10 +34,18 @@ function scrollTo(id) {
 
 <style scoped>
 .footer {
-  margin-top: 4rem;
-  padding: 3rem 0 2rem;
+  margin-top: 3rem;
+  padding: 2rem 0 1.5rem;
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0));
   border-top: 1px solid var(--nav-border);
   background: var(--section-bg);
+}
+@media (min-width: 480px) {
+  .footer {
+    margin-top: 4rem;
+    padding: 3rem 0 2rem;
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0));
+  }
 }
 
 .footer-inner {
@@ -45,7 +53,12 @@ function scrollTo(id) {
 }
 
 .footer-brand {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+@media (min-width: 480px) {
+  .footer-brand {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .logo-text { font-weight: 700; color: var(--text); }
@@ -59,16 +72,27 @@ function scrollTo(id) {
 
 .tagline {
   margin: 0.5rem 0 0;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
+}
+@media (min-width: 480px) {
+  .tagline {
+    font-size: 0.9rem;
+  }
 }
 
 .footer-links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.75rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+@media (min-width: 480px) {
+  .footer-links {
+    gap: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 }
 .footer-links a {
   color: var(--text-muted);

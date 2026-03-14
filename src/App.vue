@@ -2,10 +2,12 @@
 import { onMounted } from 'vue'
 import TheHeader from './components/TheHeader.vue'
 import TheFooter from './components/TheFooter.vue'
+import ChatWidget from './components/ChatWidget.vue'
 import { useAuth } from './composables/useAuth'
 
-const auth = useAuth()
-onMounted(() => auth.init())
+onMounted(() => {
+  useAuth().getReady()
+})
 </script>
 
 <template>
@@ -19,6 +21,7 @@ onMounted(() => auth.init())
       </router-view>
     </main>
     <TheFooter />
+    <ChatWidget />
   </div>
 </template>
 

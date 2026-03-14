@@ -1,190 +1,243 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
 const router = useRouter()
 const auth = useAuth()
 
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const localError = ref('')
+const form = ref({
+  firstName: '',
+  email: '',
+  password: '',
+  passwordConfirm: ''
+})
+const error = ref('')
+const loading = ref(false)
 
-onMounted(() => auth.clearError())
+const passwordsMatch = computed(() =>
+  form.value.password && form.value.password === form.value.passwordConfirm
+)
 
-async function onSubmit(e) {
+async function submit(e) {
   e.preventDefault()
-  localError.value = ''
-  if (password.value !== confirmPassword.value) {
-    localError.value = 'Les deux mots de passe ne correspondent pas.'
+  error.value = ''
+  if (form.value.password !== form.value.passwordConfirm) {
+    error.value = 'Les deux mots de passe doivent être identiques.'
     return
   }
-  if (password.value.length < 6) {
-    localError.value = 'Le mot de passe doit faire au moins 6 caractères.'
+  if (form.value.password.length < 6) {
+    error.value = 'Le mot de passe doit contenir au moins 6 caractères.'
     return
   }
-  const { error } = await auth.signUp(email.value, password.value)
-  if (!error) router.push('/')
+  loading.value = true
+  try {
+    await auth.signUp(form.value.email, form.value.password, {
+      first_name: form.value.firstName.trim() || undefined
+    })
+    router.push('/tableau-de-bord')
+  } catch (err) {
+    error.value = err.message || 'Impossible de créer le compte.'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
 <template>
   <div class="auth-page">
-    <div class="auth-card">
-      <h1 class="auth-title">Créer un compte</h1>
-      <p class="auth-subtitle">Rejoignez Kortex AI</p>
+    <div class="container auth-container">
+      <div class="auth-card">
+        <h1 class="auth-title">Créer un compte</h1>
+        <p class="auth-subtitle">Inscrivez-vous pour accéder à votre tableau de bord.</p>
 
-      <form @submit="onSubmit" class="auth-form">
-        <div v-if="localError || auth.error" class="form-error">
-          {{ localError || auth.error }}
-        </div>
-        <div class="form-group">
-          <label for="reg-email">Email</label>
-          <input
-            id="reg-email"
-            v-model="email"
-            type="email"
-            required
-            placeholder="vous@exemple.com"
-            autocomplete="email"
-          />
-        </div>
-        <div class="form-group">
-          <label for="reg-password">Mot de passe</label>
-          <input
-            id="reg-password"
-            v-model="password"
-            type="password"
-            required
-            minlength="6"
-            placeholder="••••••••"
-            autocomplete="new-password"
-          />
-        </div>
-        <div class="form-group">
-          <label for="reg-confirm">Confirmer le mot de passe</label>
-          <input
-            id="reg-confirm"
-            v-model="confirmPassword"
-            type="password"
-            required
-            placeholder="••••••••"
-            autocomplete="new-password"
-          />
-        </div>
-        <button
-          type="submit"
-          class="btn btn-register-page btn-block"
-          :disabled="auth.isLoading"
-        >
-          <span v-if="auth.isLoading">Création en cours…</span>
-          <span v-else>Créer mon compte</span>
-        </button>
-      </form>
+        <form class="auth-form" @submit="submit">
+          <p v-if="error" class="form-error">{{ error }}</p>
+          <div class="form-group">
+            <label for="reg-firstname">Prénom</label>
+            <input
+              id="reg-firstname"
+              v-model="form.firstName"
+              type="text"
+              autocomplete="given-name"
+              placeholder="Votre prénom"
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Email</label>
+            <input
+              id="reg-email"
+              v-model="form.email"
+              type="email"
+              required
+              autocomplete="email"
+              placeholder="vous@exemple.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Mot de passe</label>
+            <input
+              id="reg-password"
+              v-model="form.password"
+              type="password"
+              required
+              autocomplete="new-password"
+              placeholder="••••••••"
+              minlength="6"
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-password-confirm">Confirmer le mot de passe</label>
+            <input
+              id="reg-password-confirm"
+              v-model="form.passwordConfirm"
+              type="password"
+              required
+              autocomplete="new-password"
+              placeholder="••••••••"
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            :disabled="loading || !passwordsMatch"
+          >
+            {{ loading ? 'Création...' : 'Créer mon compte' }}
+          </button>
+        </form>
 
-      <p class="auth-footer">
-        Déjà un compte ?
-        <router-link to="/connexion">Se connecter</router-link>
-      </p>
+        <p class="auth-footer">
+          Déjà un compte ?
+          <router-link to="/connexion">Se connecter</router-link>
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .auth-page {
-  min-height: calc(100vh - 72px - 200px);
+  padding: 1.5rem 0 2.5rem;
+  min-height: 60vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 3rem 1rem;
+}
+@media (min-width: 480px) {
+  .auth-page {
+    padding: 2rem 0 3rem;
+  }
+}
+@media (min-width: 768px) {
+  .auth-page {
+    padding: 3rem 0 4rem;
+  }
+}
+
+.auth-container {
+  max-width: 420px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .auth-card {
-  width: 100%;
-  max-width: 400px;
   background: var(--bg-card);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-lg);
-  padding: 2rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  padding: 1.35rem;
+}
+@media (min-width: 480px) {
+  .auth-card {
+    padding: 1.75rem;
+  }
+}
+@media (min-width: 768px) {
+  .auth-card {
+    padding: 2rem;
+  }
 }
 
 .auth-title {
-  font-size: 1.75rem;
   margin: 0 0 0.25rem;
-  color: var(--text);
+  font-size: 1.5rem;
   font-weight: 700;
 }
+@media (min-width: 480px) {
+  .auth-title {
+    font-size: 1.75rem;
+  }
+}
+
 .auth-subtitle {
-  color: var(--text-muted);
   margin: 0 0 1.5rem;
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 
-.auth-form .form-group {
+.auth-form {
   margin-bottom: 1.25rem;
-}
-.auth-form .form-group label {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-muted);
-}
-.auth-form .form-group input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius);
-  border: 1px solid var(--border-accent);
-  background: var(--bg);
-  color: var(--text);
-  font-size: 1rem;
-}
-.auth-form .form-group input:focus {
-  outline: none;
-  border-color: var(--accent-green);
-  box-shadow: 0 0 0 3px var(--accent-green-subtle);
 }
 
 .form-error {
-  margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
-  background: rgba(239, 68, 68, 0.12);
+  margin: 0 0 1rem;
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
   border-radius: var(--radius);
-  color: #dc2626;
   font-size: 0.9rem;
-  line-height: 1.4;
 }
 
-.btn-register-page {
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 1rem;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+@media (min-width: 480px) {
+  .form-group input {
+    padding: 0.75rem 1rem;
+  }
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent-violet);
+  box-shadow: 0 0 0 3px var(--accent-violet-subtle);
+}
+
+.btn-block {
   width: 100%;
   margin-top: 0.5rem;
-  padding: 0.85rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: var(--radius);
-  background: var(--accent-green);
-  color: #fff;
-}
-.btn-register-page:hover:not(:disabled) {
-  background: #16a34a;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.35);
-}
-.btn-register-page:disabled {
-  opacity: 0.8;
-  cursor: not-allowed;
 }
 
 .auth-footer {
-  margin: 1.5rem 0 0;
+  margin: 0;
   text-align: center;
   font-size: 0.95rem;
   color: var(--text-muted);
 }
+
 .auth-footer a {
-  color: var(--accent-violet);
+  color: var(--accent-blue);
   font-weight: 500;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
 }
 </style>

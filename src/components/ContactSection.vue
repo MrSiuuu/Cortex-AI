@@ -88,20 +88,31 @@ function submit(e) {
 
 <style scoped>
 .contact {
-  padding: 4rem 0 5rem;
+  padding: 2.5rem 0 3rem;
+}
+@media (min-width: 480px) {
+  .contact {
+    padding: 3rem 0 4rem;
+  }
+}
+@media (min-width: 768px) {
+  .contact {
+    padding: 4rem 0 5rem;
+  }
 }
 
 .contact-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  grid-template-columns: 1fr;
+  gap: 2rem;
   align-items: start;
   max-width: 900px;
   margin: 0 auto;
 }
-@media (max-width: 700px) {
+@media (min-width: 700px) {
   .contact-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
   }
 }
 
@@ -109,10 +120,25 @@ function submit(e) {
   background: var(--bg-card);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-lg);
-  padding: 1.75rem;
+  padding: 1.25rem;
+}
+@media (min-width: 480px) {
+  .contact-form {
+    padding: 1.5rem;
+  }
+}
+@media (min-width: 700px) {
+  .contact-form {
+    padding: 1.75rem;
+  }
 }
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
+}
+@media (min-width: 480px) {
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
 }
 .form-group label {
   display: block;
@@ -174,9 +200,16 @@ button[disabled] {
   color: var(--text);
 }
 .contact-cta {
-  padding: 1rem;
+  padding: 0.9rem;
   background: var(--accent-violet-subtle);
   border-radius: var(--radius);
   border-left: 3px solid var(--accent-violet);
+  font-size: 0.9rem;
+}
+@media (min-width: 480px) {
+  .contact-cta {
+    padding: 1rem;
+    font-size: inherit;
+  }
 }
 </style>

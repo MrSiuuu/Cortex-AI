@@ -93,14 +93,36 @@ const extra = [
 
 <style scoped>
 .services {
-  padding: 4rem 0;
+  padding: 2.5rem 0;
+}
+@media (min-width: 480px) {
+  .services {
+    padding: 3rem 0;
+  }
+}
+@media (min-width: 768px) {
+  .services {
+    padding: 4rem 0;
+  }
 }
 
 .offers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+@media (min-width: 480px) {
+  .offers-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .offers-grid {
+    margin-bottom: 3rem;
+  }
 }
 
 .offer-card {
@@ -108,8 +130,13 @@ const extra = [
   background: var(--bg-card);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-lg);
-  padding: 1.75rem;
+  padding: 1.35rem;
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+@media (min-width: 480px) {
+  .offer-card {
+    padding: 1.75rem;
+  }
 }
 .offer-card:hover {
   transform: translateY(-4px);
@@ -185,8 +212,13 @@ const extra = [
 .extra-services {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 1.5rem 1.75rem;
+  padding: 1.25rem 1rem;
   border: 1px solid var(--border-accent);
+}
+@media (min-width: 480px) {
+  .extra-services {
+    padding: 1.5rem 1.75rem;
+  }
 }
 .extra-title {
   font-size: 1.1rem;
@@ -201,11 +233,18 @@ const extra = [
 .extra-list li {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
+  gap: 0.35rem 0.75rem;
+  padding: 0.6rem 0;
   border-bottom: 1px solid var(--border-subtle);
+}
+@media (min-width: 480px) {
+  .extra-list li {
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
 }
 .extra-list li:last-child {
   border-bottom: none;

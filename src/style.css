@@ -64,10 +64,14 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 280px;
   min-height: 100vh;
+  overflow-x: hidden;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
@@ -104,7 +108,17 @@ button:focus-visible {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
+}
+@media (min-width: 480px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
 }
 
 .section-title {
@@ -118,9 +132,20 @@ button:focus-visible {
 
 .section-subtitle {
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   max-width: 600px;
-  margin: 0 auto 3rem;
+  margin: 0 auto 2rem;
+  padding: 0 0.25rem;
+}
+@media (min-width: 480px) {
+  .section-subtitle {
+    margin-bottom: 2.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .section-subtitle {
+    margin-bottom: 3rem;
+  }
 }
 
 /* Bouton secondaire (ex. "Voir les tarifs" sous les offres) */

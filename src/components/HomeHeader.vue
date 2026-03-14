@@ -46,9 +46,19 @@ function scrollTo(id) {
 
 <style scoped>
 .home-header {
-  padding: 4rem 0 5rem;
+  padding: 2rem 0 3rem;
   position: relative;
   overflow: hidden;
+}
+@media (min-width: 480px) {
+  .home-header {
+    padding: 3rem 0 4rem;
+  }
+}
+@media (min-width: 900px) {
+  .home-header {
+    padding: 4rem 0 5rem;
+  }
 }
 .home-header::before {
   content: '';
@@ -68,13 +78,14 @@ function scrollTo(id) {
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
-  min-height: 380px;
+  min-height: 320px;
 }
 @media (max-width: 900px) {
   .home-header-inner {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
     text-align: center;
+    min-height: 0;
   }
   .home-header-left {
     order: 1;
@@ -84,6 +95,11 @@ function scrollTo(id) {
   }
   .home-header-cta {
     justify-content: center;
+  }
+}
+@media (min-width: 900px) {
+  .home-header-inner {
+    min-height: 380px;
   }
 }
 
@@ -100,11 +116,16 @@ function scrollTo(id) {
 }
 
 .home-header-title {
-  font-size: clamp(2rem, 4.5vw, 3.25rem);
-  margin: 0 0 1rem;
-  line-height: 1.15;
+  font-size: clamp(1.65rem, 5vw, 3.25rem);
+  margin: 0 0 0.75rem;
+  line-height: 1.2;
   color: var(--text);
   text-align: left;
+}
+@media (min-width: 480px) {
+  .home-header-title {
+    margin-bottom: 1rem;
+  }
 }
 @media (max-width: 900px) {
   .home-header-title {
@@ -134,18 +155,30 @@ function scrollTo(id) {
 .home-header-cta {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 @media (max-width: 900px) {
   .home-header-cta {
     justify-content: center;
   }
 }
+@media (min-width: 480px) {
+  .home-header-cta {
+    gap: 1rem;
+  }
+}
 
 .btn-lg {
-  padding: 0.85rem 1.75rem;
-  font-size: 1rem;
+  padding: 0.75rem 1.35rem;
+  font-size: 0.95rem;
   font-weight: 600;
+  min-height: 44px;
+}
+@media (min-width: 480px) {
+  .btn-lg {
+    padding: 0.85rem 1.75rem;
+    font-size: 1rem;
+  }
 }
 .btn-outline {
   background: transparent;
@@ -159,12 +192,18 @@ function scrollTo(id) {
 
 .chat-mock {
   width: 100%;
-  max-width: 380px;
+  max-width: 340px;
+  margin: 0 auto;
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-accent);
   box-shadow: var(--glow-violet);
   overflow: hidden;
+}
+@media (min-width: 480px) {
+  .chat-mock {
+    max-width: 380px;
+  }
 }
 .chat-mock-header {
   display: flex;
@@ -186,17 +225,30 @@ function scrollTo(id) {
   color: var(--accent-violet);
 }
 .chat-mock-body {
-  padding: 1.25rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.6rem;
+}
+@media (min-width: 480px) {
+  .chat-mock-body {
+    padding: 1.25rem;
+    gap: 0.75rem;
+  }
 }
 .msg {
   margin: 0;
-  font-size: 0.9rem;
-  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 12px;
-  max-width: 85%;
+  max-width: 90%;
+}
+@media (min-width: 480px) {
+  .msg {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.9rem;
+    max-width: 85%;
+  }
 }
 .msg.bot {
   align-self: flex-start;

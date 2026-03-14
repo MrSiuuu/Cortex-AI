@@ -1,11 +1,24 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
 const router = useRouter()
 const auth = useAuth()
 const menuOpen = ref(false)
+
+const isLoggedIn = computed(() => {
+  const ready = auth.authReady?.value ?? auth.authReady
+  const u = auth.user?.value ?? auth.user
+  return !!ready && !!u?.email
+})
+const displayName = computed(() => {
+  const u = auth.user?.value ?? auth.user
+  if (!u) return ''
+  const first = u.user_metadata?.first_name
+  if (first) return first
+  return u.email ?? ''
+})
 
 const navLinks = [
   { name: 'Accueil', to: '/', hash: '#accueil' },
@@ -46,8 +59,11 @@ function goTo(hash) {
         >
           {{ link.name }}
         </a>
-        <template v-if="auth.authReady && auth.user && auth.user.email">
-          <span class="nav-user">{{ auth.user.email }}</span>
+        <template v-if="isLoggedIn">
+          <router-link to="/tableau-de-bord" class="nav-link" @click="menuOpen = false">
+            Tableau de bord
+          </router-link>
+          <span class="nav-user">{{ displayName }}</span>
           <button type="button" class="btn btn-ghost" @click="auth.signOut(); router.push('/')">
             Déconnexion
           </button>
@@ -90,14 +106,26 @@ function goTo(hash) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  min-height: 64px;
+  height: auto;
+  padding-top: env(safe-area-inset-top, 0);
+}
+@media (min-width: 480px) {
+  .header-inner {
+    min-height: 72px;
+  }
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   text-decoration: none;
   color: var(--text);
+}
+@media (min-width: 480px) {
+  .logo {
+    font-size: 1.5rem;
+  }
 }
 .logo-ai {
   background: var(--gradient);
@@ -184,19 +212,36 @@ function goTo(hash) {
   .nav.open {
     display: flex;
     position: fixed;
-    top: 72px;
+    top: 64px;
     left: 0;
     right: 0;
     bottom: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 1.25rem;
+    padding: 1.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0));
     background: var(--bg);
     border-top: 1px solid var(--nav-border);
+    overflow-y: auto;
+  }
+  @media (min-width: 480px) {
+    .nav.open {
+      top: 72px;
+    }
   }
   .nav.open .nav-link {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    padding: 0.5rem 0;
+  }
+  .nav.open .nav-user {
+    font-size: 0.95rem;
+    word-break: break-word;
+    text-align: center;
+  }
+  .nav.open .btn {
+    min-height: 44px;
+    padding: 0.6rem 1.25rem;
   }
 }
 </style>

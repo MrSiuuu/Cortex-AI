@@ -47,13 +47,29 @@ const plans = [
 
 <style scoped>
 .pricing {
-  padding: 4rem 0;
+  padding: 2.5rem 0;
+}
+@media (min-width: 480px) {
+  .pricing {
+    padding: 3rem 0;
+  }
+}
+@media (min-width: 768px) {
+  .pricing {
+    padding: 4rem 0;
+  }
 }
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+@media (min-width: 480px) {
+  .pricing-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
 }
 
 .pricing-card {
@@ -61,9 +77,14 @@ const plans = [
   background: var(--bg-card);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-lg);
-  padding: 1.75rem;
+  padding: 1.35rem;
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
+}
+@media (min-width: 480px) {
+  .pricing-card {
+    padding: 1.75rem;
+  }
 }
 .pricing-card:hover {
   transform: translateY(-2px);
@@ -89,20 +110,36 @@ const plans = [
 }
 
 .plan-name {
-  font-size: 1.15rem;
-  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem;
   color: var(--text);
+}
+@media (min-width: 480px) {
+  .plan-name {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+  }
 }
 .plan-price {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
+}
+@media (min-width: 480px) {
+  .plan-price {
+    margin-bottom: 1.25rem;
+  }
 }
 .setup {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--accent-violet);
+}
+@media (min-width: 480px) {
+  .setup {
+    font-size: 1.5rem;
+  }
 }
 .setup-label {
   font-size: 0.8rem;
@@ -120,8 +157,13 @@ const plans = [
 .plan-features {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.25rem;
   text-align: left;
+}
+@media (min-width: 480px) {
+  .plan-features {
+    margin-bottom: 1.5rem;
+  }
 }
 .plan-features li {
   padding: 0.3rem 0;

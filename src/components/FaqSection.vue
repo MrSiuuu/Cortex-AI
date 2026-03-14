@@ -60,8 +60,18 @@ function toggle(id) {
 
 <style scoped>
 .faq {
-  padding: 4rem 0;
+  padding: 2.5rem 0;
   background: var(--section-bg);
+}
+@media (min-width: 480px) {
+  .faq {
+    padding: 3rem 0;
+  }
+}
+@media (min-width: 768px) {
+  .faq {
+    padding: 4rem 0;
+  }
 }
 
 .faq-list {
@@ -85,21 +95,34 @@ function toggle(id) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
+  padding: 0.9rem 1rem;
   text-align: left;
   background: none;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
+  min-height: 48px;
+}
+@media (min-width: 480px) {
+  .faq-question {
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+  }
 }
 .faq-question:hover {
   background: var(--accent-violet-subtle);
 }
 .faq-icon {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: var(--accent-violet);
   flex-shrink: 0;
-  margin-left: 1rem;
+  margin-left: 0.75rem;
+}
+@media (min-width: 480px) {
+  .faq-icon {
+    font-size: 1.25rem;
+    margin-left: 1rem;
+  }
 }
 .faq-answer {
   max-height: 0;
@@ -107,16 +130,23 @@ function toggle(id) {
   transition: max-height 0.3s ease;
 }
 .faq-item.open .faq-answer {
-  max-height: 200px;
+  max-height: 400px;
 }
 .faq-answer p {
   margin: 0;
-  padding: 0 1.25rem 1rem;
+  padding: 0 1rem 0.9rem;
   color: var(--text-muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.6;
   border-top: 1px solid var(--border-subtle);
-  padding-top: 0.75rem;
+  padding-top: 0.65rem;
   margin-top: 0;
+}
+@media (min-width: 480px) {
+  .faq-answer p {
+    padding: 0 1.25rem 1rem;
+    padding-top: 0.75rem;
+    font-size: 0.95rem;
+  }
 }
 </style>

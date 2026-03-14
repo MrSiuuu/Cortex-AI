@@ -1,110 +1,51 @@
-import { ref, computed } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { supabase } from '../lib/supabase'
 
-const user = ref(null)
+// État global partagé (une seule session pour toute l'app)
+const user = shallowRef(null)
 const authReady = ref(false)
+let authListener = null
+let initDone = false
+let readyResolve
+const readyPromise = new Promise((r) => { readyResolve = r })
 
-/**
- * Vérifie si une session Supabase existe dans le localStorage.
- * Supabase utilise la clé : sb-<projectRef>-auth-token
- * Sans cette clé, on considère l'utilisateur déconnecté (évite "Déconnexion" fantôme).
- */
-function hasSupabaseSessionInStorage() {
-  if (typeof localStorage === 'undefined') return false
-  const url = import.meta.env.VITE_SUPABASE_URL || ''
-  if (!url) return false
-  try {
-    const projectRef = new URL(url).hostname.split('.')[0]
-    const key = `sb-${projectRef}-auth-token`
-    return localStorage.getItem(key) != null
-  } catch {
-    return false
-  }
+async function initAuth() {
+  if (initDone) return
+  initDone = true
+  const { data: { session } } = await supabase.auth.getSession()
+  user.value = session?.user ?? null
+  authReady.value = true
+  readyResolve()
+  authListener = supabase.auth.onAuthStateChange((_event, session) => {
+    user.value = session?.user ?? null
+  })
+}
+
+function getReady() {
+  if (!initDone) initAuth()
+  return readyPromise
 }
 
 export function useAuth() {
-  const isLoading = ref(false)
-  const error = ref(null)
+  if (!authReady.value && !initDone) initAuth()
 
-  const isLoggedIn = computed(() => !!user.value)
-
-  async function init() {
-    try {
-      const hasStorage = hasSupabaseSessionInStorage()
-      if (!hasStorage) {
-        user.value = null
-        authReady.value = true
-        supabase.auth.onAuthStateChange((_event, session) => {
-          user.value = session?.user ?? null
-        })
-        return
-      }
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session?.user) {
-        user.value = null
-      } else {
-        user.value = session.user
-      }
-    } catch {
-      user.value = null
-    }
-    authReady.value = true
-    supabase.auth.onAuthStateChange((_event, session) => {
-      if (!hasSupabaseSessionInStorage()) {
-        user.value = null
-        return
-      }
-      user.value = session?.user ?? null
-    })
-    authReady.value = true
+  async function signIn(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) throw error
+    return data
   }
 
   async function signUp(email, password, metadata = {}) {
-    isLoading.value = true
-    error.value = null
-    try {
-      const { data, error: err } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: metadata }
-      })
-      if (err) {
-        error.value = getErrorMessage(err)
-        return { data: null, error: err }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: undefined,
+        data: metadata
       }
-      user.value = data.user
-      return { data, error: null }
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  function getErrorMessage(err) {
-    if (!err) return ''
-    const msg = err.message || ''
-    if (msg.includes('Email not confirmed') || msg.includes('email_not_confirmed')) {
-      return 'Compte non confirmé. Vérifiez votre boîte mail et cliquez sur le lien reçu (ou désactivez "Confirm email" dans Supabase > Authentication > Providers > Email).'
-    }
-    if (msg.includes('Invalid login credentials') || msg.includes('invalid_credentials')) {
-      return 'Email ou mot de passe incorrect.'
-    }
-    return msg
-  }
-
-  async function signIn(email, password) {
-    isLoading.value = true
-    error.value = null
-    try {
-      const { data, error: err } = await supabase.auth.signInWithPassword({ email, password })
-      if (err) {
-        error.value = getErrorMessage(err)
-        return { data: null, error: err }
-      }
-      user.value = data.user
-      return { data, error: null }
-    } finally {
-      isLoading.value = false
-    }
+    })
+    if (error) throw error
+    return data
   }
 
   async function signOut() {
@@ -112,20 +53,12 @@ export function useAuth() {
     user.value = null
   }
 
-  function clearError() {
-    error.value = null
-  }
-
   return {
-    user: computed(() => user.value),
-    authReady: computed(() => authReady.value),
-    isLoggedIn,
-    isLoading,
-    error,
-    init,
-    signUp,
+    user,
+    authReady,
+    getReady,
     signIn,
-    signOut,
-    clearError
+    signUp,
+    signOut
   }
 }

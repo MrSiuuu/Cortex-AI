@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
 
 const routes = [
   {
@@ -18,6 +19,12 @@ const routes = [
     name: 'register',
     component: () => import('../views/RegisterView.vue'),
     meta: { title: 'Créer un compte' }
+  },
+  {
+    path: '/tableau-de-bord',
+    name: 'dashboard',
+    component: () => import('../views/DashboardView.vue'),
+    meta: { title: 'Tableau de bord', requiresAuth: true }
   }
 ]
 
@@ -28,6 +35,15 @@ const router = createRouter({
     if (to.hash) return { el: to.hash, behavior: 'smooth' }
     return { top: 0 }
   }
+})
+
+router.beforeEach(async (to) => {
+  if (to.meta.requiresAuth) {
+    const auth = useAuth()
+    await auth.getReady()
+    if (!auth.user.value) return { name: 'login', query: { redirect: to.fullPath } }
+  }
+  return true
 })
 
 router.afterEach((to) => {
