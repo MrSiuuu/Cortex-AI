@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
 
 /* —— Mode sombre (défaut) —— */
 :root {
@@ -148,16 +148,67 @@ button:focus-visible {
   }
 }
 
-/* Bouton secondaire (ex. "Voir les tarifs" sous les offres) */
+/* ===== BOUTONS GLOBAUX ===== */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--accent-violet);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: white;
+  box-shadow: var(--glow-violet);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.45);
+}
+
 .btn-secondary {
   background: transparent;
   color: var(--accent-violet);
   border: 2px solid var(--accent-violet);
   padding: 0.6rem 1.2rem;
-  border-radius: var(--radius);
   font-weight: 500;
 }
 .btn-secondary:hover {
   background: var(--accent-violet-subtle);
   box-shadow: var(--glow-violet);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--accent-violet);
+  border: 2px solid var(--accent-violet);
+}
+.btn-outline:hover {
+  background: var(--accent-violet-subtle);
+  box-shadow: var(--glow-violet);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+.btn-ghost:hover {
+  color: var(--text);
+}
+
+.btn-register {
+  background: var(--accent-green);
+  color: #fff;
+}
+.btn-register:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
 }

@@ -39,40 +39,82 @@ function goTo(hash) {
     })
   }
 }
-
 </script>
 
 <template>
-  <header class="header">
-    <div class="container header-inner">
-      <router-link to="/" class="logo">
-        <span class="logo-text">Kortex</span><span class="logo-ai"> AI</span>
+  <header class="sticky top-0 z-[100] bg-[var(--nav-bg)] backdrop-blur-xl border-b border-[var(--nav-border)]">
+    <div class="container flex items-center justify-between min-h-16 sm:min-h-18 pt-[env(safe-area-inset-top,0)] h-auto">
+      <router-link to="/" class="text-xl sm:text-2xl font-bold no-underline text-[var(--text)]">
+        <span>Kortex</span><span class="bg-[var(--gradient)] bg-clip-text text-transparent"> AI</span>
       </router-link>
 
-      <nav class="nav" :class="{ open: menuOpen }">
+      <nav 
+        class="hidden lg:flex items-center gap-6"
+        :class="{
+          '!flex lg:!flex fixed top-16 sm:top-18 left-0 right-0 bottom-0 flex-col items-center justify-center gap-5 p-6 sm:p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom,0))] bg-[var(--bg)] border-t border-[var(--nav-border)] overflow-y-auto': menuOpen
+        }"
+      >
         <a
           v-for="link in navLinks"
           :key="link.name"
           href="#"
-          class="nav-link"
+          class="text-[var(--text-muted)] text-base hover:text-[var(--text)] transition-colors"
+          :class="{
+            'text-lg py-2': menuOpen
+          }"
           @click.prevent="goTo(link.hash)"
         >
           {{ link.name }}
         </a>
         <template v-if="isLoggedIn">
-          <router-link to="/tableau-de-bord" class="nav-link" @click="menuOpen = false">
+          <router-link 
+            to="/tableau-de-bord" 
+            class="text-[var(--text-muted)] text-base hover:text-[var(--text)] transition-colors"
+            :class="{
+              'text-lg py-2': menuOpen
+            }"
+            @click="menuOpen = false"
+          >
             Tableau de bord
           </router-link>
-          <span class="nav-user">{{ displayName }}</span>
-          <button type="button" class="btn btn-ghost" @click="auth.signOut(); router.push('/')">
+          <span 
+            class="text-sm text-[var(--text-muted)]"
+            :class="{
+              'text-base break-words text-center': menuOpen
+            }"
+          >
+            {{ displayName }}
+          </span>
+          <button 
+            type="button" 
+            class="btn btn-ghost"
+            :class="{
+              'min-h-11 py-2.5 px-5': menuOpen
+            }"
+            @click="auth.signOut(); router.push('/')"
+          >
             Déconnexion
           </button>
         </template>
         <template v-else>
-          <router-link to="/connexion" class="btn btn-ghost" @click="menuOpen = false">
+          <router-link 
+            to="/connexion" 
+            class="btn btn-ghost"
+            :class="{
+              'min-h-11 py-2.5 px-5': menuOpen
+            }"
+            @click="menuOpen = false"
+          >
             Connexion
           </router-link>
-          <router-link to="/inscription" class="btn btn-register" @click="menuOpen = false">
+          <router-link 
+            to="/inscription" 
+            class="btn btn-register"
+            :class="{
+              'min-h-11 py-2.5 px-5': menuOpen
+            }"
+            @click="menuOpen = false"
+          >
             Créer un compte
           </router-link>
         </template>
@@ -81,167 +123,15 @@ function goTo(hash) {
       <div class="header-actions">
         <button
           type="button"
-          class="burger"
+          class="flex flex-col gap-1.5 bg-transparent p-2 lg:hidden"
           aria-label="Menu"
           @click="menuOpen = !menuOpen"
         >
-          <span></span><span></span><span></span>
+          <span class="w-6 h-0.5 bg-[var(--text)] rounded-sm transition-transform duration-300"></span>
+          <span class="w-6 h-0.5 bg-[var(--text)] rounded-sm transition-transform duration-300"></span>
+          <span class="w-6 h-0.5 bg-[var(--text)] rounded-sm transition-transform duration-300"></span>
         </button>
       </div>
     </div>
   </header>
 </template>
-
-<style scoped>
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--nav-bg);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--nav-border);
-}
-
-.header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 64px;
-  height: auto;
-  padding-top: env(safe-area-inset-top, 0);
-}
-@media (min-width: 480px) {
-  .header-inner {
-    min-height: 72px;
-  }
-}
-
-.logo {
-  font-size: 1.25rem;
-  font-weight: 700;
-  text-decoration: none;
-  color: var(--text);
-}
-@media (min-width: 480px) {
-  .logo {
-    font-size: 1.5rem;
-  }
-}
-.logo-ai {
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.nav {
-  display: none;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.nav-link {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-.nav-link:hover {
-  color: var(--text);
-}
-
-.nav-user {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius);
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-.btn-ghost {
-  background: transparent;
-  color: var(--text-muted);
-}
-.btn-ghost:hover {
-  color: var(--text);
-}
-.btn-primary {
-  background: var(--gradient);
-  color: white;
-  box-shadow: var(--glow-violet);
-}
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 40px rgba(139, 92, 246, 0.45);
-}
-.btn-register {
-  background: var(--accent-green);
-  color: #fff;
-}
-.btn-register:hover {
-  background: #16a34a;
-  transform: translateY(-1px);
-}
-
-.burger {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  padding: 8px;
-}
-.burger span {
-  width: 24px;
-  height: 2px;
-  background: var(--text);
-  border-radius: 1px;
-  transition: transform 0.3s;
-}
-
-@media (min-width: 900px) {
-  .nav {
-    display: flex;
-  }
-  .burger {
-    display: none;
-  }
-}
-
-@media (max-width: 899px) {
-  .nav.open {
-    display: flex;
-    position: fixed;
-    top: 64px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.25rem;
-    padding: 1.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0));
-    background: var(--bg);
-    border-top: 1px solid var(--nav-border);
-    overflow-y: auto;
-  }
-  @media (min-width: 480px) {
-    .nav.open {
-      top: 72px;
-    }
-  }
-  .nav.open .nav-link {
-    font-size: 1.05rem;
-    padding: 0.5rem 0;
-  }
-  .nav.open .nav-user {
-    font-size: 0.95rem;
-    word-break: break-word;
-    text-align: center;
-  }
-  .nav.open .btn {
-    min-height: 44px;
-    padding: 0.6rem 1.25rem;
-  }
-}
-</style>

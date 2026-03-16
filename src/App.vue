@@ -11,9 +11,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="app">
+  <div class="flex flex-col min-h-screen">
     <TheHeader />
-    <main>
+    <main class="flex-1">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -26,16 +26,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-main {
-  flex: 1;
-}
-
+/* Transitions Vue */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;

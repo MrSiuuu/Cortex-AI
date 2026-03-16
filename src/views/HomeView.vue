@@ -1,25 +1,366 @@
 <script setup>
-import HomeHeader from '../components/HomeHeader.vue'
-import ServicesSection from '../components/ServicesSection.vue'
-import HowItWorksSection from '../components/HowItWorksSection.vue'
-import PricingSection from '../components/PricingSection.vue'
-import FaqSection from '../components/FaqSection.vue'
-import ContactSection from '../components/ContactSection.vue'
+import { ref } from 'vue'
+
+// Fonction pour le scroll
+function scrollTo(id) {
+  document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' })
+}
+
+// Données pour les offres
+const offers = [
+  {
+    id: 1,
+    title: 'Chatbot IA Site Web',
+    desc: 'Chatbot qui connaît votre business et répond à vos clients 24/7',
+    features: [
+      'Dashboard pour suivre les conversations',
+      'Widget personnalisable aux couleurs de votre site',
+      'Réponses en plusieurs langues'
+    ],
+    price: '500€',
+    maintenance: '99€/mois'
+  },
+  {
+    id: 2,
+    title: 'Chatbot Agent IA',
+    desc: 'Tout l\'Offre 1 + automatisations avancées',
+    features: [
+      'Prise de rendez-vous automatique',
+      'Recherche dans votre catalogue produits',
+      'Envoi de devis et emails automatiques',
+      'Notification en temps réel quand un client a besoin de vous'
+    ],
+    price: '1 000€',
+    maintenance: '149€/mois',
+    popular: true
+  },
+  {
+    id: 3,
+    title: 'Chatbot WhatsApp Business',
+    desc: 'Votre assistant IA directement sur WhatsApp',
+    features: [
+      'Vos clients vous écrivent sur WhatsApp, l\'IA répond',
+      'Envoi de catalogue produits, prise de RDV, devis',
+      'Idéal pour le marché africain'
+    ],
+    price: '800€',
+    maintenance: '129€/mois'
+  }
+]
+
+const extra = [
+  { label: 'Création de site web vitrine', price: 'à partir de 300€' },
+  { label: 'Automatisation de workflows (relance client, réponse mail, planning)', price: 'sur devis' },
+  { label: 'Intégration IA sur site existant', price: 'sur devis' }
+]
+
+// Données pour les étapes
+const steps = [
+  { num: 1, title: 'Vous nous parlez de votre business', desc: 'Ou parlez à notre IA ci-dessous' },
+  { num: 2, title: 'On configure votre chatbot IA en 48h', desc: 'Personnalisation et formation sur vos données' },
+  { num: 3, title: "On l'installe sur votre site", desc: "Une ligne de code à copier-coller" },
+  { num: 4, title: 'Vos clients sont accompagnés 24/7', desc: "Vous recevez les résumés et les leads" }
+]
+
+// Données pour les tarifs
+const plans = [
+  { name: 'Chatbot IA Site Web', setup: '500€', monthly: '99€', features: ['Widget personnalisable', 'Dashboard', 'Multi-langue'] },
+  { name: 'Chatbot Agent IA', setup: '1 000€', monthly: '149€', popular: true, features: ['Tout Offre 1', 'RDV auto', 'Catalogue', 'Notifications'] },
+  { name: 'Chatbot WhatsApp', setup: '800€', monthly: '129€', features: ['Réponses WhatsApp', 'Catalogue', 'RDV & devis'] }
+]
+
+// Données pour la FAQ
+const openId = ref(null)
+const faqs = [
+  {
+    id: 1,
+    q: 'Combien de temps pour mettre en place un chatbot ?',
+    a: 'En général 48h après validation du brief. On configure le bot, on le forme sur vos contenus, puis on vous donne une ligne de code à intégrer sur votre site.'
+  },
+  {
+    id: 2,
+    q: 'Le chatbot comprend-il plusieurs langues ?',
+    a: 'Oui. Nos chatbots peuvent répondre en français, anglais et d\'autres langues selon votre besoin. On configure les langues au démarrage.'
+  },
+  {
+    id: 3,
+    q: 'Que se passe-t-il si un client pose une question à laquelle le bot ne sait pas répondre ?',
+    a: 'Le bot peut transférer la conversation à un humain (vous) ou enregistrer la demande. Vous recevez une notification et pouvez répondre manuellement.'
+  },
+  {
+    id: 4,
+    q: 'La maintenance inclut-elle les mises à jour ?',
+    a: 'Oui. La maintenance mensuelle inclut les mises à jour du modèle IA, la surveillance des conversations et le support technique pour les petits ajustements.'
+  }
+]
+
+function toggle(id) {
+  openId.value = openId.value === id ? null : id
+}
+
+// Données pour le formulaire de contact
+const form = ref({
+  name: '',
+  email: '',
+  message: ''
+})
+const sent = ref(false)
+const sending = ref(false)
+
+function submit(e) {
+  e.preventDefault()
+  sending.value = true
+  // Placeholder : envoi formulaire (backend ou EmailJS plus tard)
+  setTimeout(() => {
+    sent.value = true
+    sending.value = false
+    form.value = { name: '', email: '', message: '' }
+  }, 800)
+}
 </script>
 
 <template>
-  <div class="home">
-    <HomeHeader />
-    <ServicesSection />
-    <HowItWorksSection />
-    <PricingSection />
-    <FaqSection />
-    <ContactSection />
+  <div class="overflow-x-hidden">
+    <!-- Header / Hero Section -->
+    <header id="accueil" class="relative overflow-hidden py-8 sm:py-12 lg:py-16 lg:py-20 before:content-[''] before:absolute before:-top-1/2 before:left-1/2 before:-translate-x-1/2 before:w-[120%] before:h-4/5 before:bg-[radial-gradient(ellipse,var(--hero-glow)_0%,transparent_60%)] before:pointer-events-none">
+      <div class="container relative grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-0 lg:min-h-[380px] text-center lg:text-left">
+        <!-- Colonne gauche : mock chat Kortex -->
+        <div class="flex justify-center items-center order-1 lg:order-none">
+          <div class="w-full max-w-[340px] sm:max-w-[380px] mx-auto bg-[var(--bg-card)] rounded-[var(--radius-lg)] border border-[var(--border-accent)] shadow-[var(--glow-violet)] overflow-hidden">
+            <div class="flex items-center gap-2 p-3 sm:p-4 bg-[var(--accent-violet-subtle)] border-b border-[var(--border-accent)]">
+              <span class="w-2 h-2 rounded-full bg-[var(--text-muted)]"></span>
+              <span class="w-2 h-2 rounded-full bg-[var(--text-muted)]"></span>
+              <span class="w-2 h-2 rounded-full bg-[var(--text-muted)]"></span>
+              <span class="ml-auto font-semibold text-[var(--accent-violet)]">Kortex</span>
+            </div>
+            <div class="p-4 sm:p-5 flex flex-col gap-2.5 sm:gap-3">
+              <p class="m-0 text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-3.5 rounded-xl max-w-[90%] sm:max-w-[85%] self-start bg-[var(--accent-blue-subtle)] text-[var(--text)]">Salut ! Je suis l'assistant IA de Kortex AI. Comment puis-je vous aider ?</p>
+              <p class="m-0 text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-3.5 rounded-xl max-w-[90%] sm:max-w-[85%] self-end bg-[var(--accent-violet)] text-white">Je cherche un chatbot pour mon site.</p>
+              <p class="m-0 text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-3.5 rounded-xl max-w-[90%] sm:max-w-[85%] self-start bg-[var(--accent-blue-subtle)] text-[var(--text)]">Super ! On a plusieurs offres. Vous avez déjà un site web ?</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne droite : titre, sous-titre, CTA -->
+        <div class="flex flex-col justify-center order-2 lg:order-none">
+          <h1 class="text-[clamp(1.65rem,5vw,3.25rem)] m-0 mb-3 sm:mb-4 leading-tight text-[var(--text)] text-left lg:text-left text-center lg:text-left">
+            Votre business,<br />
+            <span class="bg-[var(--gradient)] bg-clip-text text-transparent">automatisé par l'IA</span>
+          </h1>
+          <p class="text-[clamp(0.95rem,1.8vw,1.15rem)] text-[var(--text-muted)] m-0 mb-6 leading-relaxed text-left lg:text-left text-center lg:text-left">
+            Chatbots intelligents, automatisation de workflows, sites web — à prix accessible.
+          </p>
+          <div class="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
+            <button type="button" class="btn btn-primary px-5 py-3 sm:px-7 sm:py-3.5 text-base sm:text-lg font-semibold min-h-[44px]" @click="scrollTo('#services')">
+              Voir nos offres
+            </button>
+            <button type="button" class="btn btn-outline px-5 py-3 sm:px-7 sm:py-3.5 text-base sm:text-lg font-semibold min-h-[44px]" @click="scrollTo('#contact')">
+              Parler à notre IA
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="services" class="py-10 sm:py-12 md:py-16">
+      <div class="container">
+        <h2 class="section-title">Nos offres</h2>
+        <p class="section-subtitle">
+          Choisissez la solution qui correspond à votre besoin. Toutes incluent un accompagnement personnalisé.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5 sm:gap-6 mb-8 sm:mb-10 md:mb-12">
+          <article
+            v-for="offer in offers"
+            :key="offer.id"
+            class="relative bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-5 sm:p-7 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent-violet)] hover:bg-[var(--bg-card-hover)] hover:shadow-[var(--glow-violet)]"
+            :class="{ 'border-[var(--accent-violet)] shadow-[0_0_25px_rgba(139,92,246,0.25)]': offer.popular }"
+          >
+            <span v-if="offer.popular" class="absolute -top-2.5 right-4 bg-[var(--gradient)] text-white text-xs font-semibold px-2.5 py-1 rounded-full">Populaire</span>
+            <h3 class="text-xl m-0 mb-2 text-[var(--text)]">{{ offer.title }}</h3>
+            <p class="text-[var(--text-muted)] text-base m-0 mb-4">{{ offer.desc }}</p>
+            <ul class="list-none p-0 m-0 mb-5">
+              <li v-for="(f, i) in offer.features" :key="i" class="py-1.5 pl-5 relative text-sm text-[var(--text-muted)] before:content-['✓'] before:absolute before:left-0 before:text-[var(--accent-green)] before:font-bold">{{ f }}</li>
+            </ul>
+            <div class="flex flex-col mb-5">
+              <span class="text-lg font-bold text-[var(--accent-violet)]">À partir de {{ offer.price }}</span>
+              <span class="text-sm text-[var(--text-muted)]">+ {{ offer.maintenance }} de maintenance</span>
+            </div>
+            <button type="button" class="btn btn-secondary w-full justify-center" @click="scrollTo('#tarifs')">
+              Voir les tarifs
+            </button>
+          </article>
+        </div>
+
+        <div class="bg-[var(--bg-card)] rounded-[var(--radius-lg)] p-5 sm:p-6 sm:px-7 border border-[var(--border-accent)]">
+          <h3 class="text-lg m-0 mb-4 text-[var(--text)]">Services complémentaires</h3>
+          <ul class="list-none p-0 m-0">
+            <li v-for="(e, i) in extra" :key="i" class="flex justify-between items-start sm:items-center flex-wrap gap-1.5 sm:gap-2 py-2.5 sm:py-2 border-b border-[var(--border-subtle)] last:border-b-0">
+              <span class="text-[var(--text-muted)] text-base">{{ e.label }}</span>
+              <span class="text-[var(--accent-green)] font-medium text-sm">{{ e.price }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="comment-ca-marche" class="py-10 sm:py-12 md:py-16 bg-[var(--section-bg)]">
+      <div class="container">
+        <h2 class="section-title">Comment ça marche</h2>
+        <p class="section-subtitle">
+          En trois étapes, votre chatbot IA est en ligne et opérationnel.
+        </p>
+
+        <div class="grid grid-cols-1 min-[500px]:grid-cols-2 min-[700px]:grid-cols-4 gap-6 sm:gap-7 min-[700px]:gap-8 relative">
+          <div
+            v-for="(step, i) in steps"
+            :key="step.num"
+            class="relative text-center"
+            :class="{ 'last': i === steps.length - 1 }"
+          >
+            <div class="w-11 h-11 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 flex items-center justify-center bg-[var(--gradient)] text-white font-bold text-lg sm:text-xl rounded-full shadow-[var(--glow-violet)]">{{ step.num }}</div>
+            <div>
+              <h3 class="text-base sm:text-lg m-0 mb-1 sm:mb-1.5 text-[var(--text)]">{{ step.title }}</h3>
+              <p class="text-sm sm:text-base text-[var(--text-muted)] m-0 leading-snug">{{ step.desc }}</p>
+            </div>
+            <div v-if="i < steps.length - 1" class="hidden min-[700px]:block absolute top-6 left-[calc(50%+32px)] right-[-50%] h-0.5 bg-gradient-to-r from-[var(--accent-violet)] to-transparent opacity-50 last:hidden"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="tarifs" class="py-10 sm:py-12 md:py-16">
+      <div class="container">
+        <h2 class="section-title">Tarifs</h2>
+        <p class="section-subtitle">
+          Tableau comparatif de nos trois offres. Demandez un devis personnalisé pour votre projet.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5 sm:gap-6">
+          <div
+            v-for="plan in plans"
+            :key="plan.name"
+            class="relative bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-5 sm:p-7 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--glow-violet)] hover:bg-[var(--bg-card-hover)]"
+            :class="{ 'border-[var(--accent-violet)] shadow-[0_0_30px_rgba(139,92,246,0.2)]': plan.popular }"
+          >
+            <span v-if="plan.popular" class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[var(--gradient)] text-white text-xs font-semibold px-3 py-1 rounded-full">Recommandé</span>
+            <h3 class="text-base sm:text-lg m-0 mb-3 sm:mb-4 text-[var(--text)]">{{ plan.name }}</h3>
+            <div class="flex flex-col gap-1 mb-4 sm:mb-5">
+              <span class="text-xl sm:text-2xl font-bold text-[var(--accent-violet)]">{{ plan.setup }}</span>
+              <span class="text-xs text-[var(--text-muted)]">Mise en place</span>
+              <span class="text-base font-semibold text-[var(--text)]">{{ plan.monthly }}/mois</span>
+              <span class="text-xs text-[var(--text-muted)]">Maintenance</span>
+            </div>
+            <ul class="list-none p-0 m-0 mb-5 sm:mb-6 text-left">
+              <li v-for="(f, i) in plan.features" :key="i" class="py-1.5 pl-5 text-sm text-[var(--text-muted)] relative before:content-['•'] before:absolute before:left-0 before:text-[var(--accent-green)]">{{ f }}</li>
+            </ul>
+            <button
+              type="button"
+              class="btn btn-primary w-full"
+              @click="scrollTo('#contact')"
+            >
+              Demander un devis personnalisé
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-10 sm:py-12 md:py-16 bg-[var(--section-bg)]">
+      <div class="container">
+        <h2 class="section-title">FAQ</h2>
+        <p class="section-subtitle">
+          Questions fréquentes sur nos chatbots et notre accompagnement.
+        </p>
+
+        <div class="max-w-2xl mx-auto">
+          <div
+            v-for="faq in faqs"
+            :key="faq.id"
+            class="border border-[rgba(139,92,246,0.2)] rounded-[var(--radius)] mb-3 overflow-hidden bg-[var(--bg-card)] transition-colors duration-200"
+            :class="{ 'border-[var(--accent-violet)]': openId === faq.id }"
+          >
+            <button type="button" class="w-full flex justify-between items-center p-4 sm:p-5 text-left bg-transparent text-[var(--text)] text-base sm:text-lg font-medium min-h-12 hover:bg-[var(--accent-violet-subtle)]" @click="toggle(faq.id)">
+              <span>{{ faq.q }}</span>
+              <span class="text-xl sm:text-2xl text-[var(--accent-violet)] flex-shrink-0 ml-3 sm:ml-4">{{ openId === faq.id ? '−' : '+' }}</span>
+            </button>
+            <div class="max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out" :class="{ 'max-h-[400px]': openId === faq.id }">
+              <p class="m-0 p-4 sm:px-5 sm:pb-4 text-[var(--text-muted)] text-sm sm:text-base leading-relaxed border-t border-[var(--border-subtle)] pt-2.5 sm:pt-3">{{ faq.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-10 sm:py-12 md:py-16 md:py-20">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-subtitle">
+          Une question ? Envoyez-nous un message ou discutez avec notre IA.
+        </p>
+
+        <div class="grid grid-cols-1 min-[700px]:grid-cols-2 gap-8 min-[700px]:gap-12 items-start max-w-4xl mx-auto">
+          <form class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-5 sm:p-6 min-[700px]:p-7" @submit="submit">
+            <div v-if="sent" class="p-4 bg-[var(--accent-green-subtle)] rounded-[var(--radius)] text-[var(--accent-green)] font-medium">
+              Message envoyé ! Nous vous recontactons rapidement.
+            </div>
+            <template v-else>
+              <div class="mb-4 sm:mb-5">
+                <label for="name" class="block mb-1.5 text-sm font-medium text-[var(--text-muted)]">Nom</label>
+                <input
+                  id="name"
+                  v-model="form.name"
+                  type="text"
+                  required
+                  placeholder="Votre nom"
+                  class="w-full px-4 py-3 rounded-[var(--radius)] border border-[var(--border-accent)] bg-[var(--bg)] text-[var(--text)] text-base font-inherit focus:outline-none focus:border-[var(--accent-violet)] focus:shadow-[0_0_0_3px_var(--accent-violet-subtle)] placeholder:text-[var(--text-muted)] placeholder:opacity-70"
+                />
+              </div>
+              <div class="mb-4 sm:mb-5">
+                <label for="email" class="block mb-1.5 text-sm font-medium text-[var(--text-muted)]">Email</label>
+                <input
+                  id="email"
+                  v-model="form.email"
+                  type="email"
+                  required
+                  placeholder="votre@email.com"
+                  class="w-full px-4 py-3 rounded-[var(--radius)] border border-[var(--border-accent)] bg-[var(--bg)] text-[var(--text)] text-base font-inherit focus:outline-none focus:border-[var(--accent-violet)] focus:shadow-[0_0_0_3px_var(--accent-violet-subtle)] placeholder:text-[var(--text-muted)] placeholder:opacity-70"
+                />
+              </div>
+              <div class="mb-4 sm:mb-5">
+                <label for="message" class="block mb-1.5 text-sm font-medium text-[var(--text-muted)]">Message</label>
+                <textarea
+                  id="message"
+                  v-model="form.message"
+                  required
+                  rows="4"
+                  placeholder="Décrivez votre projet ou votre question..."
+                  class="w-full px-4 py-3 rounded-[var(--radius)] border border-[var(--border-accent)] bg-[var(--bg)] text-[var(--text)] text-base font-inherit focus:outline-none focus:border-[var(--accent-violet)] focus:shadow-[0_0_0_3px_var(--accent-violet-subtle)] placeholder:text-[var(--text-muted)] placeholder:opacity-70"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary px-5 py-3 sm:px-7 sm:py-3.5 text-base sm:text-lg font-semibold min-h-[44px] disabled:opacity-70 disabled:cursor-not-allowed" :disabled="sending">
+                {{ sending ? 'Envoi...' : 'Envoyer' }}
+              </button>
+            </template>
+          </form>
+
+          <div class="text-[var(--text-muted)] text-base">
+            <p class="m-0 mb-4">Ou contactez-nous directement :</p>
+            <ul class="list-none p-0 m-0 mb-6">
+              <li class="py-1"><strong class="text-[var(--text)]">Email :</strong> contact@kortex-ai.com</li>
+              <li class="py-1"><strong class="text-[var(--text)]">WhatsApp :</strong> (lien à venir)</li>
+            </ul>
+            <p class="p-3.5 sm:p-4 bg-[var(--accent-violet-subtle)] rounded-[var(--radius)] border-l-4 border-[var(--accent-violet)] text-sm sm:text-base m-0">
+              <strong class="text-[var(--text)]">Discutez avec notre IA</strong> pour une recommandation personnalisée (bientôt disponible).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
-
-<style scoped>
-.home {
-  overflow-x: hidden;
-}
-</style>
