@@ -22,21 +22,25 @@ const displayName = computed(() => {
 
 const navLinks = [
   { name: 'Accueil', to: '/', hash: '#accueil' },
+  { name: 'Formation IA', to: '/formation', hash: null },
   { name: 'Services', to: '/', hash: '#services' },
-  { name: 'Comment ça marche', to: '/', hash: '#comment-ca-marche' },
   { name: 'Tarifs', to: '/', hash: '#tarifs' },
   { name: 'Contact', to: '/', hash: '#contact' }
 ]
 
-function goTo(hash) {
+function goTo(link) {
   menuOpen.value = false
-  if (router.currentRoute.value.path === '/' && hash) {
-    const el = document.querySelector(hash)
-    el?.scrollIntoView({ behavior: 'smooth' })
+  if (link.hash) {
+    if (router.currentRoute.value.path === link.to) {
+      const el = document.querySelector(link.hash)
+      el?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      router.push(link.to + link.hash).then(() => {
+        setTimeout(() => document.querySelector(link.hash)?.scrollIntoView({ behavior: 'smooth' }), 100)
+      })
+    }
   } else {
-    router.push('/' + (hash ? '#' + hash.slice(1) : '')).then(() => {
-      setTimeout(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' }), 100)
-    })
+    router.push(link.to)
   }
 }
 </script>
@@ -62,7 +66,7 @@ function goTo(hash) {
           :class="{
             'text-lg py-2': menuOpen
           }"
-          @click.prevent="goTo(link.hash)"
+          @click.prevent="goTo(link)"
         >
           {{ link.name }}
         </a>

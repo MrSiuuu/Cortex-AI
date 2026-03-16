@@ -205,32 +205,6 @@ function submit(e) {
       </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="comment-ca-marche" class="py-10 sm:py-12 md:py-16 bg-[var(--section-bg)]">
-      <div class="container">
-        <h2 class="section-title">Comment ça marche</h2>
-        <p class="section-subtitle">
-          En trois étapes, votre chatbot IA est en ligne et opérationnel.
-        </p>
-
-        <div class="grid grid-cols-1 min-[500px]:grid-cols-2 min-[700px]:grid-cols-4 gap-6 sm:gap-7 min-[700px]:gap-8 relative">
-          <div
-            v-for="(step, i) in steps"
-            :key="step.num"
-            class="relative text-center"
-            :class="{ 'last': i === steps.length - 1 }"
-          >
-            <div class="w-11 h-11 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 flex items-center justify-center bg-[var(--gradient)] text-white font-bold text-lg sm:text-xl rounded-full shadow-[var(--glow-violet)]">{{ step.num }}</div>
-            <div>
-              <h3 class="text-base sm:text-lg m-0 mb-1 sm:mb-1.5 text-[var(--text)]">{{ step.title }}</h3>
-              <p class="text-sm sm:text-base text-[var(--text-muted)] m-0 leading-snug">{{ step.desc }}</p>
-            </div>
-            <div v-if="i < steps.length - 1" class="hidden min-[700px]:block absolute top-6 left-[calc(50%+32px)] right-[-50%] h-0.5 bg-gradient-to-r from-[var(--accent-violet)] to-transparent opacity-50 last:hidden"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Pricing Section -->
     <section id="tarifs" class="py-10 sm:py-12 md:py-16">
       <div class="container">

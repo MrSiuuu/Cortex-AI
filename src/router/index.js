@@ -21,6 +21,12 @@ const routes = [
     meta: { title: 'Créer un compte' }
   },
   {
+    path: '/formation',
+    name: 'formation',
+    component: () => import('../views/FormationView.vue'),
+    meta: { title: 'Formation IA' }
+  },
+  {
     path: '/tableau-de-bord',
     name: 'dashboard',
     component: () => import('../views/DashboardView.vue'),
