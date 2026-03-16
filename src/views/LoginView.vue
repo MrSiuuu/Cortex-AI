@@ -48,9 +48,9 @@ async function submit(e) {
 </script>
 
 <template>
-  <div class="py-6 sm:py-8 md:py-12 min-h-[60vh] flex items-center">
+  <div class="py-6 sm:py-8 md:py-12 min-h-[60vh] flex items-center px-4 sm:px-6">
     <div class="container max-w-[420px] mx-auto w-full">
-      <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-5 sm:p-7 md:p-8">
+      <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-4 sm:p-6 md:p-8">
         <h1 class="m-0 mb-1 text-2xl sm:text-3xl font-bold">Connexion</h1>
         <p class="m-0 mb-6 text-[var(--text-muted)] text-base">Accédez à votre tableau de bord Kortex AI.</p>
 

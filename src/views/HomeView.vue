@@ -1,10 +1,89 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 // Fonction pour le scroll
 function scrollTo(id) {
   document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' })
 }
+
+// ── Chat animation ─────────────────────────────────────
+const conversation = [
+  { side: 'left',  text: "Salut ! Je suis l'assistant IA de Kortex AI. Comment puis-je vous aider ?" },
+  { side: 'right', text: "Je cherche un chatbot pour mon site e-commerce." },
+  { side: 'left',  text: "Super choix ! Vous voulez qu'il réponde aux questions clients ou qu'il qualifie les leads ?" },
+  { side: 'right', text: "Les deux si possible ! 😄" },
+  { side: 'left',  text: "Parfait, on fait ça avec n8n + une IA connectée à votre catalogue. Délai : 48h." },
+  { side: 'right', text: "C'est rapide ! Vous avez des exemples ?" },
+  { side: 'left',  text: "Oui, je vous envoie une démo live maintenant. Vous allez adorer 🚀" },
+]
+
+const visibleMessages = ref([])
+const isTyping = ref(false)
+const currentPlaceholder = ref('Décrivez votre projet...')
+
+let timeouts = []
+let phInterval = null
+
+const placeholders = [
+  'Décrivez votre projet...',
+  'Je veux automatiser mes emails...',
+  'Un chatbot pour mon e-commerce...',
+  'Créer un site avec IA intégrée...',
+]
+let phIdx = 0
+
+function clearAll() {
+  timeouts.forEach(clearTimeout)
+  timeouts = []
+}
+
+function schedule(fn, delay) {
+  const id = setTimeout(fn, delay)
+  timeouts.push(id)
+}
+
+function runConversation() {
+  visibleMessages.value = []
+  isTyping.value = false
+  let t = 600
+
+  conversation.forEach((msg, i) => {
+    if (msg.side === 'left') {
+      schedule(() => { isTyping.value = true }, t)
+      t += 1100
+      schedule(() => {
+        isTyping.value = false
+        visibleMessages.value.push({ ...msg, entering: true })
+        setTimeout(() => {
+          if (visibleMessages.value[i]) visibleMessages.value[i].entering = false
+        }, 400)
+      }, t)
+    } else {
+      schedule(() => {
+        visibleMessages.value.push({ ...msg, entering: true })
+        setTimeout(() => {
+          if (visibleMessages.value[i]) visibleMessages.value[i].entering = false
+        }, 400)
+      }, t)
+    }
+    t += msg.side === 'left' ? 1600 : 900
+  })
+
+  schedule(() => { runConversation() }, t + 2500)
+}
+
+onMounted(() => {
+  runConversation()
+  phInterval = setInterval(() => {
+    phIdx = (phIdx + 1) % placeholders.length
+    currentPlaceholder.value = placeholders[phIdx]
+  }, 3000)
+})
+
+onUnmounted(() => {
+  clearAll()
+  if (phInterval) clearInterval(phInterval)
+})
 
 // Données pour les offres
 const offers = [
@@ -122,55 +201,174 @@ function submit(e) {
 <template>
   <div class="overflow-x-hidden">
     <!-- Header / Hero Section -->
-    <header id="accueil" class="relative overflow-hidden py-8 sm:py-12 lg:py-16 lg:py-20 before:content-[''] before:absolute before:-top-1/2 before:left-1/2 before:-translate-x-1/2 before:w-[120%] before:h-4/5 before:bg-[radial-gradient(ellipse,var(--hero-glow)_0%,transparent_60%)] before:pointer-events-none">
-      <div class="container relative grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-0 lg:min-h-[380px] text-center lg:text-left">
-        <!-- Colonne gauche : mock chat Kortex -->
-        <div class="flex justify-center items-center order-1 lg:order-none">
-          <div class="w-full max-w-[340px] sm:max-w-[380px] mx-auto bg-[var(--bg-card)] rounded-[var(--radius-lg)] border border-[var(--border-accent)] shadow-[var(--glow-violet)] overflow-hidden">
-            <div class="flex items-center gap-2 p-3 sm:p-4 bg-[var(--accent-violet-subtle)] border-b border-[var(--border-accent)]">
-              <span class="w-2 h-2 rounded-full bg-[var(--text-muted)]"></span>
-              <span class="w-2 h-2 rounded-full bg-[var(--text-muted)]"></span>
-              <span class="w-2 h-2 rounded-full bg-[var(--text-muted)]"></span>
-              <span class="ml-auto font-semibold text-[var(--accent-violet)]">Kortex</span>
-            </div>
-            <div class="p-4 sm:p-5 flex flex-col gap-2.5 sm:gap-3">
-              <p class="m-0 text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-3.5 rounded-xl max-w-[90%] sm:max-w-[85%] self-start bg-[var(--accent-blue-subtle)] text-[var(--text)]">Salut ! Je suis l'assistant IA de Kortex AI. Comment puis-je vous aider ?</p>
-              <p class="m-0 text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-3.5 rounded-xl max-w-[90%] sm:max-w-[85%] self-end bg-[var(--accent-violet)] text-white">Je cherche un chatbot pour mon site.</p>
-              <p class="m-0 text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-3.5 rounded-xl max-w-[90%] sm:max-w-[85%] self-start bg-[var(--accent-blue-subtle)] text-[var(--text)]">Super ! On a plusieurs offres. Vous avez déjà un site web ?</p>
-            </div>
-          </div>
-        </div>
+    <header id="accueil" class="relative overflow-hidden min-h-screen flex items-center py-12 sm:py-16 md:py-20">
+      <!-- Background -->
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute w-[500px] h-[500px] sm:w-[600px] sm:h-[600px] md:w-[650px] md:h-[650px] rounded-full top-[-20%] left-[-10%] sm:left-[-12%]"
+          style="background: radial-gradient(circle, rgba(124,58,237,.18), transparent 70%); filter: blur(100px); animation: orbFloat 14s ease-in-out infinite;" />
+        <div class="absolute w-[350px] h-[350px] sm:w-[400px] sm:h-[400px] md:w-[420px] md:h-[420px] rounded-full bottom-[-5%] right-[3%]"
+          style="background: radial-gradient(circle, rgba(16,185,129,.1), transparent 70%); filter: blur(100px); animation: orbFloat 16s ease-in-out infinite; animation-delay: -6s;" />
+        <div class="absolute inset-0"
+          style="background-image: linear-gradient(rgba(124,58,237,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,.04) 1px, transparent 1px); background-size: 50px 50px;" />
+      </div>
 
-        <!-- Colonne droite : titre, sous-titre, CTA -->
-        <div class="flex flex-col justify-center order-2 lg:order-none">
-          <h1 class="text-[clamp(1.65rem,5vw,3.25rem)] m-0 mb-3 sm:mb-4 leading-tight text-[var(--text)] text-left lg:text-left text-center lg:text-left">
-            Votre business,<br />
-            <span class="bg-[var(--gradient)] bg-clip-text text-transparent">automatisé par l'IA</span>
-          </h1>
-          <p class="text-[clamp(0.95rem,1.8vw,1.15rem)] text-[var(--text-muted)] m-0 mb-6 leading-relaxed text-left lg:text-left text-center lg:text-left">
-            Chatbots intelligents, automatisation de workflows, sites web — à prix accessible.
-          </p>
-          <div class="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
-            <button type="button" class="btn btn-primary px-5 py-3 sm:px-7 sm:py-3.5 text-base sm:text-lg font-semibold min-h-[44px]" @click="scrollTo('#services')">
-              Voir nos offres
-            </button>
-            <button type="button" class="btn btn-outline px-5 py-3 sm:px-7 sm:py-3.5 text-base sm:text-lg font-semibold min-h-[44px]" @click="scrollTo('#contact')">
-              Parler à notre IA
-            </button>
+      <div class="container relative z-10 max-w-[1180px] mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 xl:gap-16 items-center">
+          
+          <!-- LEFT: Chat -->
+          <div class="flex justify-center order-1 lg:order-none">
+            <div class="relative w-full max-w-[340px] sm:max-w-[380px]">
+              <div class="bg-[#16122a] border border-[rgba(124,58,237,.25)] rounded-[20px] overflow-hidden shadow-[0_0_0_1px_rgba(124,58,237,.1),0_40px_80px_rgba(0,0,0,.5),0_0_80px_rgba(124,58,237,.08)]">
+                <!-- Topbar -->
+                <div class="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 bg-[#110d24] border-b border-[rgba(124,58,237,.15)]">
+                  <div class="flex gap-1 sm:gap-1.5">
+                    <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ff5f57]"></span>
+                    <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#febc2e]"></span>
+                    <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#28c840]"></span>
+                  </div>
+                  <div class="flex-1 flex items-center gap-1.5 sm:gap-2 ml-2 sm:ml-3">
+                    <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#10b981]"></div>
+                    <span class="text-xs sm:text-sm font-semibold text-[#a78bfa]">Kortex</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-[10px] sm:text-xs text-[rgba(255,255,255,.35)]">
+                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#10b981]" style="animation: blink 2s ease-in-out infinite;"></span>
+                    En ligne
+                  </div>
+                </div>
+
+                <!-- Chat body -->
+                <div class="p-3 sm:p-4 sm:p-5 min-h-[240px] sm:min-h-[260px] flex flex-col gap-2 sm:gap-2.5 overflow-hidden">
+                  <div
+                    v-for="(msg, i) in visibleMessages"
+                    :key="i"
+                    class="flex items-end gap-2"
+                    :class="msg.side === 'right' ? 'flex-row-reverse' : ''"
+                    style="animation: msgIn .35s ease both;"
+                  >
+                    <div v-if="msg.side === 'left'" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#5b21b6] flex items-center justify-center text-[10px] sm:text-xs font-bold text-white flex-shrink-0">K</div>
+                    <div class="max-w-[75%] sm:max-w-[78%] px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed"
+                      :class="msg.side === 'left' ? 'bg-[#1e1840] border border-[rgba(124,58,237,.2)] text-[rgba(255,255,255,.88)] rounded-bl-sm' : 'bg-gradient-to-br from-[#7c3aed] to-[#6d28d9] text-white rounded-br-sm shadow-[0_4px_16px_rgba(124,58,237,.35)]'">
+                      {{ msg.text }}
+                    </div>
+                  </div>
+
+                  <!-- Typing indicator -->
+                  <div v-if="isTyping" class="flex items-end gap-2" style="animation: msgIn .35s ease both;">
+                    <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#5b21b6] flex items-center justify-center text-[10px] sm:text-xs font-bold text-white flex-shrink-0">K</div>
+                    <div class="px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-2xl rounded-bl-sm bg-[#1e1840] border border-[rgba(124,58,237,.2)]">
+                      <div class="flex gap-1 sm:gap-1.5">
+                        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[rgba(255,255,255,.4)]" style="animation: typingBounce 1.2s ease-in-out infinite;"></span>
+                        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[rgba(255,255,255,.4)]" style="animation: typingBounce 1.2s ease-in-out infinite; animation-delay: .15s;"></span>
+                        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[rgba(255,255,255,.4)]" style="animation: typingBounce 1.2s ease-in-out infinite; animation-delay: .3s;"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Input bar -->
+                <div class="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-[#110d24] border-t border-[rgba(124,58,237,.12)]">
+                  <div class="flex-1 flex items-center gap-1.5 bg-[#1e1840] border border-[rgba(124,58,237,.18)] rounded-lg px-2.5 sm:px-3 py-2 sm:py-2.5 min-h-[36px]">
+                    <span class="text-[10px] sm:text-xs text-[rgba(255,255,255,.3)] flex-1 transition-opacity duration-300">{{ currentPlaceholder }}</span>
+                    <span class="w-[1.5px] h-3 sm:h-3.5 bg-[#7c3aed]" style="animation: cursorBlink 1s step-end infinite;"></span>
+                  </div>
+                  <button class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-[#7c3aed] to-[#5b21b6] flex items-center justify-center text-white flex-shrink-0 shadow-[0_4px_14px_rgba(124,58,237,.4)] hover:scale-105 transition-transform">
+                    <svg width="12" height="12" sm:width="14" sm:height="14" viewBox="0 0 24 24" fill="none">
+                      <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Floating tags -->
+              <div class="hidden sm:block absolute -top-4 -right-5 sm:-right-6 bg-[rgba(22,18,42,.9)] border border-[rgba(124,58,237,.25)] rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs text-[rgba(255,255,255,.7)] whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,.3)] backdrop-blur-sm"
+                style="animation: floatTag 5s ease-in-out infinite;">
+                ⚡ Automatisation
+              </div>
+              <div class="hidden sm:block absolute bottom-8 -left-6 sm:-left-8 bg-[rgba(22,18,42,.9)] border border-[rgba(124,58,237,.25)] rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs text-[rgba(255,255,255,.7)] whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,.3)] backdrop-blur-sm"
+                style="animation: floatTag 6s ease-in-out infinite; animation-delay: -2s;">
+                🤖 IA Agentique
+              </div>
+              <div class="hidden sm:block absolute -bottom-4 right-8 sm:right-12 bg-[rgba(22,18,42,.9)] border border-[rgba(124,58,237,.25)] rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs text-[rgba(255,255,255,.7)] whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,.3)] backdrop-blur-sm"
+                style="animation: floatTag 5.5s ease-in-out infinite; animation-delay: -4s;">
+                🌐 Sites web
+              </div>
+            </div>
           </div>
+
+          <!-- RIGHT: Copy -->
+          <div class="flex flex-col gap-4 sm:gap-5 md:gap-6 order-2 lg:order-none text-center lg:text-left">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 bg-[rgba(124,58,237,.12)] border border-[rgba(124,58,237,.3)] px-3 sm:px-4 py-1 sm:py-1.5 rounded-full w-fit mx-auto lg:mx-0">
+              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#10b981]" style="animation: blink 2s ease-in-out infinite;"></span>
+              <span class="text-[10px] sm:text-xs text-[#a78bfa] font-medium tracking-wide uppercase">Agence IA · Kortex AI</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-[clamp(2rem, 4.5vw, 3.6rem)] font-bold leading-tight m-0">
+              Votre business,<br>
+              <span class="bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#10b981] bg-clip-text text-transparent bg-[length:200%_200%]"
+                style="animation: gradShift 5s ease-in-out infinite;">
+                augmenté par l'IA
+              </span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-sm sm:text-base text-[rgba(255,255,255,.5)] leading-relaxed max-w-md mx-auto lg:mx-0 m-0">
+              Chatbots intelligents, automatisation de workflows, sites web sur mesure — on transforme votre façon de travailler, à prix accessible.
+            </p>
+
+            <!-- Stats -->
+            <div class="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 md:gap-8">
+              <div class="flex flex-col">
+                <span class="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-none">16+</span>
+                <span class="text-[10px] sm:text-xs text-[rgba(255,255,255,.4)] mt-1 tracking-wide">Workflows déployés</span>
+              </div>
+              <div class="hidden sm:block w-px bg-[rgba(255,255,255,.08)]"></div>
+              <div class="flex flex-col">
+                <span class="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-none">48h</span>
+                <span class="text-[10px] sm:text-xs text-[rgba(255,255,255,.4)] mt-1 tracking-wide">Délai d'intégration</span>
+              </div>
+              <div class="hidden sm:block w-px bg-[rgba(255,255,255,.08)]"></div>
+              <div class="flex flex-col">
+                <span class="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-none">100%</span>
+                <span class="text-[10px] sm:text-xs text-[rgba(255,255,255,.4)] mt-1 tracking-wide">Sans code requis</span>
+              </div>
+            </div>
+
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+              <button type="button" @click="scrollTo('#services')" class="btn btn-primary px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold w-full sm:w-auto flex items-center justify-center gap-2">
+                Voir nos offres
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <button type="button" @click="scrollTo('#contact')" class="btn btn-outline px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold w-full sm:w-auto">
+                Parler à notre IA
+              </button>
+            </div>
+
+            <!-- Trust line -->
+            <div class="flex items-center gap-2 justify-center lg:justify-start text-[10px] sm:text-xs text-[rgba(255,255,255,.3)]">
+              <span class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#10b981]"></span>
+              Réponse sous 24h · Sans engagement · Devis gratuit
+            </div>
+          </div>
+
         </div>
       </div>
     </header>
 
     <!-- Services Section -->
     <section id="services" class="py-10 sm:py-12 md:py-16">
-      <div class="container">
+      <div class="container px-4 sm:px-6">
         <h2 class="section-title">Nos offres</h2>
         <p class="section-subtitle">
           Choisissez la solution qui correspond à votre besoin. Toutes incluent un accompagnement personnalisé.
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5 sm:gap-6 mb-8 sm:mb-10 md:mb-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mb-8 sm:mb-10 md:mb-12">
           <article
             v-for="offer in offers"
             :key="offer.id"
@@ -207,13 +405,13 @@ function submit(e) {
 
     <!-- Pricing Section -->
     <section id="tarifs" class="py-10 sm:py-12 md:py-16">
-      <div class="container">
+      <div class="container px-4 sm:px-6">
         <h2 class="section-title">Tarifs</h2>
         <p class="section-subtitle">
           Tableau comparatif de nos trois offres. Demandez un devis personnalisé pour votre projet.
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5 sm:gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           <div
             v-for="plan in plans"
             :key="plan.name"
@@ -245,13 +443,13 @@ function submit(e) {
 
     <!-- FAQ Section -->
     <section class="py-10 sm:py-12 md:py-16 bg-[var(--section-bg)]">
-      <div class="container">
+      <div class="container px-4 sm:px-6">
         <h2 class="section-title">FAQ</h2>
         <p class="section-subtitle">
           Questions fréquentes sur nos chatbots et notre accompagnement.
         </p>
 
-        <div class="max-w-2xl mx-auto">
+        <div class="max-w-2xl mx-auto px-4">
           <div
             v-for="faq in faqs"
             :key="faq.id"
@@ -272,13 +470,13 @@ function submit(e) {
 
     <!-- Contact Section -->
     <section id="contact" class="py-10 sm:py-12 md:py-16 md:py-20">
-      <div class="container">
+      <div class="container px-4 sm:px-6">
         <h2 class="section-title">Contact</h2>
         <p class="section-subtitle">
           Une question ? Envoyez-nous un message ou discutez avec notre IA.
         </p>
 
-        <div class="grid grid-cols-1 min-[700px]:grid-cols-2 gap-8 min-[700px]:gap-12 items-start max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start max-w-4xl mx-auto">
           <form class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-5 sm:p-6 min-[700px]:p-7" @submit="submit">
             <div v-if="sent" class="p-4 bg-[var(--accent-green-subtle)] rounded-[var(--radius)] text-[var(--accent-green)] font-medium">
               Message envoyé ! Nous vous recontactons rapidement.
@@ -338,3 +536,41 @@ function submit(e) {
     </section>
   </div>
 </template>
+
+<style scoped>
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0); }
+  40% { transform: translate(25px, -20px); }
+  70% { transform: translate(-15px, 25px); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes floatTag {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes gradShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+</style>

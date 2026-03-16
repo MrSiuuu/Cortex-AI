@@ -47,24 +47,24 @@ function goTo(link) {
 
 <template>
   <header class="sticky top-0 z-[100] bg-[var(--nav-bg)] backdrop-blur-xl border-b border-[var(--nav-border)]">
-    <div class="container flex items-center justify-between min-h-16 sm:min-h-18 pt-[env(safe-area-inset-top,0)] h-auto">
-      <router-link to="/" class="text-xl sm:text-2xl font-bold no-underline text-[var(--text)]">
+    <div class="container flex items-center justify-between min-h-14 sm:min-h-16 md:min-h-18 pt-[env(safe-area-inset-top,0)] h-auto px-4 sm:px-6">
+      <router-link to="/" class="text-lg sm:text-xl md:text-2xl font-bold no-underline text-[var(--text)]">
         <span>Kortex</span><span class="bg-[var(--gradient)] bg-clip-text text-transparent"> AI</span>
       </router-link>
 
       <nav 
-        class="hidden lg:flex items-center gap-6"
+        class="hidden lg:flex items-center gap-4 xl:gap-6"
         :class="{
-          '!flex lg:!flex fixed top-16 sm:top-18 left-0 right-0 bottom-0 flex-col items-center justify-center gap-5 p-6 sm:p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom,0))] bg-[var(--bg)] border-t border-[var(--nav-border)] overflow-y-auto': menuOpen
+          '!flex lg:!flex fixed top-14 sm:top-16 md:top-18 left-0 right-0 bottom-0 flex-col items-center justify-center gap-4 sm:gap-5 p-4 sm:p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom,0))] bg-[var(--bg)] border-t border-[var(--nav-border)] overflow-y-auto': menuOpen
         }"
       >
         <a
           v-for="link in navLinks"
           :key="link.name"
           href="#"
-          class="text-[var(--text-muted)] text-base hover:text-[var(--text)] transition-colors"
+          class="text-[var(--text-muted)] text-sm sm:text-base hover:text-[var(--text)] transition-colors whitespace-nowrap"
           :class="{
-            'text-lg py-2': menuOpen
+            'text-base sm:text-lg py-2': menuOpen
           }"
           @click.prevent="goTo(link)"
         >

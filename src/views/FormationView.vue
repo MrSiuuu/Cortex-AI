@@ -19,63 +19,63 @@
     <main class="relative z-10">
 
       <!-- ══ HERO ══ -->
-      <section class="flex flex-col items-center text-center px-6 py-36 relative overflow-hidden">
+      <section class="flex flex-col items-center text-center px-4 sm:px-6 py-16 sm:py-24 md:py-32 lg:py-36 relative overflow-hidden">
         <!-- Orbs -->
-        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"
+        <div class="absolute top-[-10%] left-[-10%] w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none"
           style="background: radial-gradient(circle, var(--accent-violet-subtle), transparent 70%); filter: blur(80px); animation: orbFloat 12s ease-in-out infinite;" />
-        <div class="absolute top-[30%] right-[-8%] w-[380px] h-[380px] rounded-full pointer-events-none"
+        <div class="absolute top-[30%] right-[-8%] w-[250px] h-[250px] sm:w-[320px] sm:h-[320px] md:w-[380px] md:h-[380px] rounded-full pointer-events-none"
           style="background: radial-gradient(circle, var(--accent-green-subtle), transparent 70%); filter: blur(80px); animation: orbFloat 14s ease-in-out infinite; animation-delay: -5s;" />
 
         <!-- Badge -->
-        <div class="reveal inline-flex items-center gap-2 border border-[var(--border-accent)] bg-[var(--accent-violet-subtle)] px-4 py-1.5 rounded-full mb-14">
-          <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-green)]" style="animation: blink 2s ease-in-out infinite;" />
-          <span class="text-xs text-[var(--accent-violet)] font-medium tracking-wide uppercase">Kortex Academy — Formation IA</span>
+        <div class="reveal inline-flex items-center gap-2 border border-[var(--border-accent)] bg-[var(--accent-violet-subtle)] px-3 sm:px-4 py-1 sm:py-1.5 rounded-full mb-8 sm:mb-12 md:mb-14">
+          <span class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[var(--accent-green)]" style="animation: blink 2s ease-in-out infinite;" />
+          <span class="text-[10px] sm:text-xs text-[var(--accent-violet)] font-medium tracking-wide uppercase">Kortex Academy — Formation IA</span>
         </div>
 
         <!-- Title -->
-        <h1 class="reveal text-[clamp(2.5rem, 8vw, 5rem)] font-bold leading-tight mb-14" style="animation-delay: .1s;">
+        <h1 class="reveal text-[clamp(2rem, 8vw, 5rem)] font-bold leading-tight mb-6 sm:mb-10 md:mb-14 px-4" style="animation-delay: .1s;">
           Maîtrisez<br>
           <span class="bg-[var(--gradient)] bg-clip-text text-transparent">l'intelligence</span><br>
           artificielle
         </h1>
 
-        <p class="reveal text-[var(--text-muted)] max-w-md leading-relaxed mb-16 text-base" style="animation-delay:.2s;">
+        <p class="reveal text-[var(--text-muted)] max-w-md leading-relaxed mb-8 sm:mb-12 md:mb-16 text-sm sm:text-base px-4" style="animation-delay:.2s;">
           Du premier prompt à l'automatisation complète. Trois niveaux, une méthode. Zéro code requis.
         </p>
 
-        <div class="reveal flex gap-4 flex-wrap justify-center mb-0" style="animation-delay:.3s;">
-          <button type="button" @click="scrollTo('formations')" class="btn btn-primary px-8 py-3.5 text-base font-semibold">
+        <div class="reveal flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-0 px-4" style="animation-delay:.3s;">
+          <button type="button" @click="scrollTo('formations')" class="btn btn-primary px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold w-full sm:w-auto">
             Découvrir les formations
           </button>
-          <button type="button" @click="scrollTo('dashboard')" class="btn btn-outline px-8 py-3.5 text-base font-semibold">
+          <button type="button" @click="scrollTo('dashboard')" class="btn btn-outline px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold w-full sm:w-auto">
             Voir le dashboard
           </button>
         </div>
       </section>
 
       <!-- ══ STATS ══ -->
-      <div class="border-y border-[var(--border-subtle)] py-12 px-6 bg-[var(--section-bg)]">
-        <div class="container max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center reveal">
+      <div class="border-y border-[var(--border-subtle)] py-8 sm:py-10 md:py-12 px-4 sm:px-6 bg-[var(--section-bg)]">
+        <div class="container max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center reveal">
           <div v-for="s in stats" :key="s.label">
-            <div class="text-5xl font-bold mb-2" style="color: var(--accent-violet);">{{ s.num }}</div>
-            <div class="text-sm text-[var(--text-muted)]">{{ s.label }}</div>
+            <div class="text-3xl sm:text-4xl md:text-5xl font-bold mb-1 sm:mb-2" style="color: var(--accent-violet);">{{ s.num }}</div>
+            <div class="text-xs sm:text-sm text-[var(--text-muted)]">{{ s.label }}</div>
           </div>
         </div>
       </div>
 
       <!-- ══ FORMATIONS ══ -->
-      <section id="formations" class="py-16 md:py-20">
-        <div class="container">
+      <section id="formations" class="py-12 sm:py-16 md:py-20">
+        <div class="container px-4 sm:px-6">
           <h2 class="section-title">Trois niveaux, une trajectoire</h2>
           <p class="section-subtitle">
             Choisissez votre niveau et progressez à votre rythme. Pas de prérequis technique.
           </p>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
             <article
               v-for="(n, i) in niveaux"
               :key="n.id"
-              class="relative bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-6 sm:p-8 transition-all duration-500 group overflow-hidden"
+              class="relative bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-5 sm:p-6 md:p-8 transition-all duration-500 group overflow-hidden"
               :class="{ 'border-[var(--accent-violet)] shadow-[var(--glow-violet)]': n.popular }"
               @mousemove="tilt($event, i)"
               @mouseleave="untilt(i)"
@@ -97,8 +97,8 @@
                 {{ n.tag }}
               </div>
 
-              <h3 class="text-2xl font-bold m-0 mb-3 text-[var(--text)]" v-html="n.title" />
-              <p class="text-[var(--text-muted)] text-sm leading-relaxed mb-5">{{ n.sub }}</p>
+              <h3 class="text-xl sm:text-2xl font-bold m-0 mb-2 sm:mb-3 text-[var(--text)]" v-html="n.title" />
+              <p class="text-[var(--text-muted)] text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5">{{ n.sub }}</p>
 
               <!-- Durée -->
               <div class="flex items-center gap-1.5 text-xs text-[var(--text-muted)] mb-6">
@@ -129,8 +129,8 @@
       </section>
 
       <!-- ══ DASHBOARD ══ -->
-      <section id="dashboard" class="py-16 md:py-20 bg-[var(--section-bg)]">
-        <div class="container">
+      <section id="dashboard" class="py-12 sm:py-16 md:py-20 bg-[var(--section-bg)]">
+        <div class="container px-4 sm:px-6">
           <h2 class="section-title">Votre dashboard personnel</h2>
           <p class="section-subtitle">
             Suivez votre progression et accédez à vos formations.
@@ -140,42 +140,42 @@
           <div class="border border-[var(--border-accent)] rounded-[var(--radius-lg)] overflow-hidden bg-[var(--bg-card)] reveal">
 
             <!-- Topbar -->
-            <div class="flex items-center gap-3 px-5 py-3.5 bg-[var(--bg)] border-b border-[var(--border-subtle)]">
-              <div class="flex gap-1.5">
-                <div class="w-2.5 h-2.5 rounded-full bg-red-400/70" />
-                <div class="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
-                <div class="w-2.5 h-2.5 rounded-full bg-green-400/70" />
+            <div class="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3.5 bg-[var(--bg)] border-b border-[var(--border-subtle)]">
+              <div class="flex gap-1 sm:gap-1.5">
+                <div class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-red-400/70" />
+                <div class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-yellow-400/70" />
+                <div class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-green-400/70" />
               </div>
-              <div class="flex-1 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-md px-3 py-1 text-center text-xs text-[var(--text-muted)]">
+              <div class="flex-1 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-md px-2 sm:px-3 py-1 text-center text-[10px] sm:text-xs text-[var(--text-muted)] truncate">
                 app.kortex-ai.com/formation
               </div>
             </div>
 
-            <div class="flex flex-col md:flex-row min-h-[480px]">
+            <div class="flex flex-col lg:flex-row min-h-[400px] sm:min-h-[480px]">
 
               <!-- Sidebar -->
-              <div class="hidden md:flex flex-col w-52 border-r border-[var(--border-subtle)] p-5 gap-1 flex-shrink-0">
-                <div class="flex items-center gap-2 mb-5 text-xl font-bold">
+              <div class="hidden lg:flex flex-col w-48 xl:w-52 border-r border-[var(--border-subtle)] p-4 sm:p-5 gap-1 flex-shrink-0">
+                <div class="flex items-center gap-2 mb-4 sm:mb-5 text-lg sm:text-xl font-bold">
                   <div class="w-2 h-2 rounded-full bg-[var(--gradient)]" />
                   Kortex
                 </div>
                 <div v-for="nav in navItems" :key="nav.label"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 cursor-default"
+                  class="flex items-center gap-2 sm:gap-2.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition-all duration-200 cursor-default"
                   :class="nav.active ? 'bg-[var(--accent-violet-subtle)] text-[var(--accent-violet)]' : 'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card-hover)]'">
-                  <span class="text-xs opacity-60">{{ nav.icon }}</span>
+                  <span class="text-[10px] sm:text-xs opacity-60">{{ nav.icon }}</span>
                   {{ nav.label }}
                 </div>
               </div>
 
               <!-- Main -->
-              <div class="flex-1 p-6 md:p-8">
-                <div class="mb-1 text-2xl font-bold">
+              <div class="flex-1 p-4 sm:p-6 md:p-8">
+                <div class="mb-1 text-xl sm:text-2xl font-bold">
                   Bonjour, <span class="text-[var(--accent-violet)]">{{ userName }}</span>
                 </div>
-                <div class="text-sm text-[var(--text-muted)] mb-7">Continuez votre progression — 3 niveaux disponibles</div>
+                <div class="text-xs sm:text-sm text-[var(--text-muted)] mb-5 sm:mb-7">Continuez votre progression — 3 niveaux disponibles</div>
 
                 <!-- Offer cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-7">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-5 sm:mb-7">
                   <div v-for="(offer, i) in offers" :key="offer.id"
                     class="border rounded-[var(--radius-lg)] p-5 transition-all duration-300 cursor-default relative overflow-hidden group bg-[var(--bg-card)]"
                     :class="[
@@ -206,15 +206,15 @@
                 </div>
 
                 <!-- Modules -->
-                <div class="text-xs text-[var(--text-muted)] uppercase mb-3 font-semibold tracking-wide">
+                <div class="text-[10px] sm:text-xs text-[var(--text-muted)] uppercase mb-2 sm:mb-3 font-semibold tracking-wide">
                   Modules en cours — Niveau 01
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <div v-for="mod in modules" :key="mod.name"
-                    class="border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-3.5 bg-[var(--bg-card)]">
-                    <span class="block text-base mb-2 opacity-50">{{ mod.icon }}</span>
-                    <span class="block text-sm text-[var(--text)] mb-1 font-medium">{{ mod.name }}</span>
-                    <span class="text-xs" :style="`color:${mod.done ? 'var(--accent-violet)' : 'var(--text-muted)'}`">{{ mod.status }}</span>
+                    class="border border-[var(--border-accent)] rounded-[var(--radius-lg)] p-2.5 sm:p-3.5 bg-[var(--bg-card)]">
+                    <span class="block text-sm sm:text-base mb-1 sm:mb-2 opacity-50">{{ mod.icon }}</span>
+                    <span class="block text-xs sm:text-sm text-[var(--text)] mb-0.5 sm:mb-1 font-medium">{{ mod.name }}</span>
+                    <span class="text-[10px] sm:text-xs" :style="`color:${mod.done ? 'var(--accent-violet)' : 'var(--text-muted)'}`">{{ mod.status }}</span>
                   </div>
                 </div>
               </div>
@@ -224,48 +224,48 @@
       </section>
 
       <!-- ══ PROCESS ══ -->
-      <section class="py-16 md:py-20">
-        <div class="container">
+      <section class="py-12 sm:py-16 md:py-20">
+        <div class="container px-4 sm:px-6">
           <h2 class="section-title">Trois étapes vers l'autonomie</h2>
           <p class="section-subtitle">
             Un parcours simple et progressif pour maîtriser l'IA.
           </p>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative reveal">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12 relative reveal">
             <!-- Line connector -->
             <div class="hidden md:block absolute top-6 left-[calc(16.66%+24px)] right-[calc(16.66%+24px)] h-px opacity-30"
               style="background: var(--gradient);" />
 
             <div v-for="step in steps" :key="step.num" class="group text-center">
-              <div class="w-12 h-12 rounded-full border border-[var(--border-accent)] flex items-center justify-center mx-auto mb-6 text-base font-bold text-[var(--accent-violet)] bg-[var(--bg-card)] transition-all duration-300 group-hover:border-[var(--accent-violet)] group-hover:shadow-[var(--glow-violet)]">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[var(--border-accent)] flex items-center justify-center mx-auto mb-4 sm:mb-6 text-sm sm:text-base font-bold text-[var(--accent-violet)] bg-[var(--bg-card)] transition-all duration-300 group-hover:border-[var(--accent-violet)] group-hover:shadow-[var(--glow-violet)]">
                 {{ step.num }}
               </div>
-              <div class="text-xl font-bold mb-2 text-[var(--text)]">{{ step.title }}</div>
-              <p class="text-sm text-[var(--text-muted)] leading-relaxed">{{ step.desc }}</p>
+              <div class="text-lg sm:text-xl font-bold mb-2 text-[var(--text)]">{{ step.title }}</div>
+              <p class="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed px-2">{{ step.desc }}</p>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ══ FOOTER CTA ══ -->
-      <section class="py-16 md:py-20 text-center relative overflow-hidden bg-[var(--section-bg)]">
+      <section class="py-12 sm:py-16 md:py-20 text-center relative overflow-hidden bg-[var(--section-bg)]">
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div class="w-[600px] h-[600px] rounded-full opacity-20"
+          <div class="w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[600px] md:h-[600px] rounded-full opacity-20"
             style="background: radial-gradient(circle, var(--accent-violet-subtle), transparent 70%); filter: blur(60px);" />
         </div>
-        <div class="container relative reveal">
-          <h2 class="section-title mb-5">
+        <div class="container relative reveal px-4 sm:px-6">
+          <h2 class="section-title mb-4 sm:mb-5">
             Prêt à maîtriser<br>
             <span class="bg-[var(--gradient)] bg-clip-text text-transparent">l'IA</span> ?
           </h2>
-          <p class="section-subtitle max-w-md mx-auto mb-10">
+          <p class="section-subtitle max-w-md mx-auto mb-8 sm:mb-10">
             Rejoignez Kortex Academy — sans coder, sans jargon, avec des résultats dès la première session.
           </p>
-          <div class="flex gap-4 justify-center flex-wrap">
-            <button type="button" @click="scrollTo('formations')" class="btn btn-primary px-8 py-3.5 text-base font-semibold">
+          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center flex-wrap px-4">
+            <button type="button" @click="scrollTo('formations')" class="btn btn-primary px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold w-full sm:w-auto">
               Commencer maintenant
             </button>
-            <button type="button" @click="scrollTo('dashboard')" class="btn btn-outline px-8 py-3.5 text-base font-semibold">
+            <button type="button" @click="scrollTo('dashboard')" class="btn btn-outline px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold w-full sm:w-auto">
               Voir le dashboard
             </button>
           </div>
